@@ -1,14 +1,14 @@
-const mongoose=require('mongoose')
+const mongoose = require('mongoose')
 
-const adminSchema=new mongoose.Schema({
-    
+const adminSchema = new mongoose.Schema({
+
     name: {
         type: String,
         required: true,
         min: 4,
         max: 15
     },
-    email:{
+    email: {
         type: String,
         required: true,
         min: 4,

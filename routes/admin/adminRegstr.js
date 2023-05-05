@@ -1,23 +1,46 @@
-const router=require('express').Router()
-const adminModel=require('../../model/adminModel')
+const router = require('express').Router()
+const adminModel = require('../../model/adminModel')
+const { adminValidation } = require('../../function/admin/adminValidation')
+const bcrypt = require('bcrypt')
 
-
-router.get('/',(req,res)=>{
-    res.send('Welcome to admin page')
+router.get('/', async (req, res) => {
+    const viewall = await adminModel.find()
+    res.json({
+        details: viewall
+    })
 })
-router.post('/register',async(req,res)=>{
-    const admins= new adminModel({
-        name:req.body.name,
-        email:req.body.email,
-        password:req.body.password
+
+// register new admin 
+router.post('/register', async (req, res) => {
+
+
+
+
+
+
+    const salt = await bcrypt.genSalt(10)
+    const hashpassword = await bcrypt.hash(req.body.password, salt)
+
+    const { error } = adminValidation(req.body)
+    if (error) {
+        res.json({
+            err: error.details[0].message
+        })
+    }
+
+    const admins = new adminModel({
+        name: req.body.name,
+        email: req.body.email,
+        password: hashpassword
+
     })
     try {
-        const saves=await admins.save()
-        res.json({saves})
+        const saves = await admins.save()
+        res.json({ saves })
     } catch (error) {
-        
+
     }
 })
 
 
-module.exports=router
+module.exports = router 
