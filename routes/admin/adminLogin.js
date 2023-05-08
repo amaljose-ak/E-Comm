@@ -3,10 +3,6 @@ const adminModel = require('../../model/adminModel')
 const bcrypt = require('bcrypt')
 const {loginValidation}=require('../../function/admin/adminValidation')
 
-router.get('/all',async(req,res)=>{
-  const viewall= await adminModel.find()
-  res.json({viewall})
-})
 
 
 
