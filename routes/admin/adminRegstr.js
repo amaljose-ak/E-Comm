@@ -3,7 +3,7 @@ const adminModel = require('../../model/adminModel')
 const { adminValidation } = require('../../function/admin/adminValidation')
 const bcrypt = require('bcrypt')
 
-router.get('/', async (req, res) => {
+router.get('/all', async (req, res) => {
     const viewall = await adminModel.find()
     res.json({
         details: viewall
@@ -11,12 +11,12 @@ router.get('/', async (req, res) => {
 })
 
 // register new admin 
-router.post('/register', async (req, res) => {
+router.post('/', async (req, res) => {
 
-
-
-
-
+    const adminexist= await adminModel.findOne({email:req.body.email})
+    if(adminexist){
+        return res.json({message:"already registred with this email"})
+    }
 
     const salt = await bcrypt.genSalt(10)
     const hashpassword = await bcrypt.hash(req.body.password, salt)
